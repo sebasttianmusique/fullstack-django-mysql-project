@@ -1,0 +1,27 @@
+{% extends "tienda/base.html" %}
+{% block title %}Eliminar Calificación{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger fw-bold">Confirmar eliminación</h2>
+
+<p>¿Está seguro de que desea eliminar la calificación <strong>ID {{ calificacion.id_calificacion }}</strong>?</p>
+
+<div class="card p-3 shadow-sm mb-3" style="max-width:500px;">
+    <small class="text-muted">
+        Cliente: {{ calificacion.id_cliente }}<br>
+        Profesional: {{ calificacion.id_profesional }}<br>
+        Servicio: {{ calificacion.id_servicio }}<br>
+        Puntaje: {{ calificacion.puntaje }}<br>
+        Fecha: {{ calificacion.fecha_calificacion }}
+    </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger me-2">Sí, eliminar</button>
+    <a href="{% url 'lista_calificaciones' %}" class="btn btn-secondary">No, cancelar</a>
+</form>
+
+{% endblock %}
+

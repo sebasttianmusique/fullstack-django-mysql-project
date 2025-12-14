@@ -1,0 +1,44 @@
+{% extends "tienda/base.html" %}
+{% block title %}Gestión de Ciudades{% endblock %}
+
+{% block content %}
+
+
+<h2 class="h3 mb-4 text-gray-800 font-weight-bold">
+  {% if form.instance.pk %}
+    <i class="fas fa-edit text-warning mr-2"></i>Editar Ubicación
+  {% else %}
+    <i class="fas fa-plus-circle text-primary mr-2"></i>Registrar Nueva Ciudad
+  {% endif %}
+</h2>
+
+
+<div class="card shadow-sm mb-4" style="max-width: 600px;">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Información de la Ciudad</h6>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+
+            <hr>
+
+            
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'lista_ciudades' %}" class="btn btn-secondary mr-2">
+                    <i class="fas fa-times fa-sm text-white-50 mr-1"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save fa-sm text-white-50 mr-1"></i> Guardar Ciudad
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

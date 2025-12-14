@@ -1,0 +1,36 @@
+{% extends "tienda/base.html" %}
+{% block title %}Eliminar Notificación{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger">Confirmar eliminación</h2>
+
+<p>
+    ¿Está seguro de que desea eliminar la notificación 
+    <strong>ID {{ notificacion.id_notificacion }}</strong>?
+</p>
+
+<div class="mb-3">
+    <small class="text-muted">
+        Mensaje: {{ notificacion.mensaje }}<br>
+        Fecha envío: {{ notificacion.fecha_envio }}<br>
+        Tipo: {{ notificacion.tipo_notificacion }}<br>
+        Estado: {{ notificacion.estado_notificacion }}<br>
+        Lectura: {{ notificacion.estado_lectura }}<br>
+        Cliente: {{ notificacion.id_cliente }}<br>
+        Profesional: {{ notificacion.id_profesional }}<br>
+        Administrador: {{ notificacion.id_administrador }}<br>
+        Incidencia: {{ notificacion.id_incidencia }}<br>
+        Pago: {{ notificacion.id_pago }}<br>
+        Agenda: {{ notificacion.id_agenda }}<br>
+        Comentario: {{ notificacion.id_comentario }}
+    </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'lista_notificaciones' %}" class="btn btn-secondary">No, cancelar</a>
+</form>
+
+{% endblock %} 

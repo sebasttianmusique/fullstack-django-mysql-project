@@ -1,0 +1,26 @@
+{% extends "tienda/base.html" %}
+{% block title %}Eliminar Comentario{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger">Confirmar eliminación</h2>
+
+<p>¿Está seguro de que desea eliminar el comentario 
+<strong>ID {{ comentario.id_comentario }}</strong>?</p>
+
+<div class="mb-3">
+  <small class="text-muted">
+      Cliente: {{ comentario.id_cliente }}<br>
+      Calificación: {{ comentario.id_calificacion }}<br>
+      Comentario: {{ comentario.texto_comentario }}<br>
+      Fecha: {{ comentario.fecha_comentario }}
+  </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'lista_comentarios' %}" class="btn btn-secondary">No, cancelar</a>
+</form>
+
+{% endblock %} 

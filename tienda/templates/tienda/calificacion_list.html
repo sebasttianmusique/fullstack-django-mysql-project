@@ -1,0 +1,160 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Gestión de Calificaciones{% endblock %}
+
+{% block content %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-primary font-weight-bold d-flex align-items-center">
+        
+        <img src="{% static 'img/Calificacion_png.png' %}" alt="Icono Calificación" 
+             style="height: 80px; width: auto; margin-right: 15px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));"
+             onerror="this.src='https://cdn-icons-png.flaticon.com/512/2911/2911470.png'">
+        
+        <span style="letter-spacing: -0.5px;">Gestión de Calificaciones</span>
+    </h1>
+
+    <a href="{% url 'crear_calificacion' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm rounded-pill px-3">
+        <i class="fas fa-star-half-alt fa-sm text-white-50 mr-1"></i> Nueva Evaluación
+    </a>
+</div>
+
+
+<div class="row">
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Opiniones</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ calificaciones|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Satisfacción Alta </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">-🌟🌟🌟🌟🌟-</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="far fa-smile fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 border-bottom-primary">
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-history mr-2"></i>Historial de Evaluaciones</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 20%;">Cliente</th>
+                        <th style="width: 20%;">Profesional</th>
+                        <th style="width: 25%;">Servicio</th>
+                        <th style="width: 15%;">Puntaje</th>
+                        <th style="width: 10%;">Fecha</th>
+                        <th style="width: 5%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for calificacion in calificaciones %}
+                    <tr>
+                        <td class="align-middle font-weight-bold text-gray-600">#{{ calificacion.id_calificacion }}</td>
+                        
+                        
+                        <td class="align-middle">
+                            <div class="font-weight-bold text-dark">
+                                {{ calificacion.id_cliente.id_cliente.nombre }} {{ calificacion.id_cliente.id_cliente.apellido }}
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            <div class="font-weight-bold text-primary">
+                                {{ calificacion.id_profesional.id_profesional.nombre }} {{ calificacion.id_profesional.id_profesional.apellido }}
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            <div class="text-gray-800">
+                                {{ calificacion.id_servicio.nombre_servicio }}
+                            </div>
+                        </td>
+                        
+                        
+                        <td class="align-middle">
+                            {% with puntaje=calificacion.puntaje %}
+                                
+                                <div class="
+                                    {% if puntaje >= 4 %}text-success
+                                    {% elif puntaje == 3 %}text-warning
+                                    {% else %}text-danger
+                                    {% endif %}
+                                ">
+                                    {% for i in "12345" %}
+                                        {% if i|make_list|first|add:"0" <= puntaje %}
+                                            <i class="fas fa-star"></i> 
+                                        {% else %}
+                                            <i class="far fa-star text-gray-300"></i> 
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="small text-gray-600 ml-1">({{ puntaje }}/5)</span>
+                                </div>
+                            {% endwith %}
+                        </td>
+
+                        
+                        <td class="align-middle small text-gray-700">
+                            {% if calificacion.fecha_calificacion %}
+                                {{ calificacion.fecha_calificacion|date:"d M, Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+
+                        <td class="align-middle text-center">
+                            <a href="{% url 'editar_calificacion' calificacion.id_calificacion %}" class="btn btn-warning btn-sm btn-circle shadow-sm mr-1" title="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'eliminar_calificacion' calificacion.id_calificacion %}" class="btn btn-danger btn-sm btn-circle shadow-sm" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <img src="{% static 'img/undraw_empty_state.svg' %}" alt="Empty" style="width: 150px; opacity: 0.5;" class="mb-3">
+                            <p class="text-gray-500 mb-0">Aún no hay evaluaciones registradas.</p>
+                        </td>
+                    </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

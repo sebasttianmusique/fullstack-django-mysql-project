@@ -1,0 +1,186 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Agenda de Citas{% endblock %}
+
+{% block content %}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+    <h1 class="h3 mb-0 text-primary font-weight-bold d-flex align-items-center">
+
+        <img src="{% static 'img/Agenda_png.png' %}" alt="Icono Agenda" 
+             style="height: 80px; width: auto; margin-right: 15px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));">
+    
+        <span style="letter-spacing: -0.5px;margin-left: -5px;">Agenda</span>
+    </h1>
+    
+    
+    <a href="{% url 'crear_agenda' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm rounded-pill px-3">
+        <i class="fas fa-calendar-plus fa-sm text-white-50 mr-1"></i> Nueva Cita
+    </a>
+    
+</div>
+
+
+
+<div class="row">
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Citas</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ agendas|length }}</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Por Confirmar</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">--</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-clock fa-2x text-gray-300"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Confirmadas</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">--</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-check-double fa-2x text-gray-300"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Canceladas</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">--</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-ban fa-2x text-gray-300"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 border-bottom-primary">
+        <h6 class="m-0 font-weight-bold text-primary">Próximos Eventos</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 20%;">Fecha y Hora</th>
+                        <th style="width: 25%;">Cliente & Servicio</th>
+                        <th style="width: 20%;">Profesional</th>
+                        <th style="width: 15%;">Estado</th>
+                        <th style="width: 15%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for agenda in agendas %}
+                    <tr>
+                        <td class="align-middle font-weight-bold text-gray-600">#{{ agenda.id_agenda }}</td>
+                        
+                        
+                        <td class="align-middle">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary text-white rounded p-2 mr-2 text-center" style="min-width: 45px;">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div>
+                                    <div class="font-weight-bold">{{ agenda.fecha_cita|date:"d M, Y" }}</div>
+                                    <div class="small text-gray-500"><i class="far fa-clock"></i> {{ agenda.hora_cita }}</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            
+                            <div class="font-weight-bold text-primary">{{ agenda.id_servicio.nombre_servicio }}</div>
+                            <div class="small text-gray-600">
+                                
+                                <i class="fas fa-user text-gray-400"></i> 
+                                {{ agenda.id_cliente.id_cliente.nombre }} {{ agenda.id_cliente.id_cliente.apellido }}
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            
+                            <i class="fas fa-user-tie text-gray-400 mr-1"></i> 
+                            {{ agenda.id_profesional.id_profesional.nombre }} {{ agenda.id_profesional.id_profesional.apellido }}
+                            
+                            
+                            {% if agenda.id_ciudad %}
+                            <div class="small text-muted pl-4">{{ agenda.id_ciudad.nombre_ciudad }}</div>
+                            {% endif %}
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            {% if agenda.estado_cita == 'PENDIENTE' %}
+                                <span class="badge badge-warning badge-pill px-3">Pendiente</span>
+                            {% elif agenda.estado_cita == 'CONFIRMADA' %}
+                                <span class="badge badge-success badge-pill px-3">Confirmada</span>
+                            {% elif agenda.estado_cita == 'CANCELADA' %}
+                                <span class="badge badge-danger badge-pill px-3">Cancelada</span>
+                            {% elif agenda.estado_cita == 'COMPLETADA' %}
+                                <span class="badge badge-info badge-pill px-3">Completada</span>
+                            {% else %}
+                                <span class="badge badge-secondary badge-pill px-3">{{ agenda.estado_cita }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="align-middle text-center">
+                            <a href="{% url 'editar_agenda' agenda.id_agenda %}" class="btn btn-primary btn-sm btn-circle shadow-sm mr-1" title="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'eliminar_agenda' agenda.id_agenda %}" class="btn btn-danger btn-sm btn-circle shadow-sm" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <img src="{% static 'img/undraw_posting_photo.svg' %}" alt="Empty" style="width: 150px; opacity: 0.5;" class="mb-3">
+                            <p class="text-gray-500 mb-0">No hay citas programadas.</p>
+                        </td>
+                    </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

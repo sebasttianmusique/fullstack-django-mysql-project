@@ -1,0 +1,95 @@
+{% extends "tienda/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Gestión de Cita{% endblock %}
+
+{% block content %}
+
+<h2 class="h3 mb-4 text-gray-800 font-weight-bold">
+    {% if form.instance.pk %}
+        <i class="fas fa-edit text-warning mr-2"></i>Reprogramar Cita #{{ form.instance.pk }}
+    {% else %}
+        <i class="fas fa-calendar-plus text-primary mr-2"></i>Agendar Nueva Cita
+    {% endif %}
+</h2>
+
+
+<div class="card shadow-sm mb-4 p-4" style="max-width: 750px;">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            
+            <div class="col-md-6">
+                <h6 class="text-primary mb-3">Detalles del Servicio</h6>
+                
+                <div class="form-group mb-3">
+                    <label for="{{ form.id_cliente.id }}">Cliente</label>
+                    {% render_field form.id_cliente class="form-control" %}
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="{{ form.id_profesional.id }}">Profesional</label>
+                    {% render_field form.id_profesional class="form-control" %}
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="{{ form.id_servicio.id }}">Servicio a Agendar</label>
+                    {% render_field form.id_servicio class="form-control" %}
+                </div>
+            </div>
+
+            
+            <div class="col-md-6">
+                <h6 class="text-primary mb-3">Fecha, Hora y Lugar</h6>
+
+                <div class="form-group mb-3">
+                    <label for="{{ form.fecha_cita.id }}">Fecha de la Cita</label>
+                    {% render_field form.fecha_cita class="form-control" type="date" %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="{{ form.hora_cita.id }}">Hora de la Cita</label>
+                    {% render_field form.hora_cita class="form-control" type="time" %}
+                </div>
+                
+                <div class="form-group mb-4">
+                    <label for="{{ form.id_ciudad.id }}">Ubicación (Ciudad)</label>
+                    {% render_field form.id_ciudad class="form-control" %}
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        
+        
+        <h6 class="text-primary mb-3">Estado y Observaciones</h6>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-4">
+                    <label for="{{ form.estado_cita.id }}">Estado Actual</label>
+                    {% render_field form.estado_cita class="form-control" %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-4">
+                    <label for="{{ form.id_contrato.id }}">Referencia de Contrato (Opcional)</label>
+                    {% render_field form.id_contrato class="form-control" %}
+                </div>
+            </div>
+        </div>
+
+
+        
+        <div class="d-flex justify-content-end mt-3">
+            <a href="{% url 'lista_agendas' %}" class="btn btn-secondary mr-2">
+                <i class="fas fa-times fa-sm text-white-50 mr-1"></i> Cancelar
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save fa-sm text-white-50 mr-1"></i> Guardar Cita
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

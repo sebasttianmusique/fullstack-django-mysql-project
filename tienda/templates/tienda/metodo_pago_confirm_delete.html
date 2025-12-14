@@ -1,0 +1,24 @@
+{% extends "tienda/base.html" %}
+{% block title %}Eliminar Método de Pago{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger">Confirmar Eliminación</h2>
+
+<p>¿Está seguro de que desea eliminar el método de pago 
+<strong>ID {{ metodo.id_metodo_pago }}</strong>?</p>
+
+<div class="mb-3">
+    <small class="text-muted">
+        Nombre: {{ metodo.nombre_metodo }}<br>
+        Descripción: {{ metodo.descripcion }}
+    </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'lista_metodo' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %} 

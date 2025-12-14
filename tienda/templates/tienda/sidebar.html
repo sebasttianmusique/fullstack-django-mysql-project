@@ -1,0 +1,147 @@
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- LOGO -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-hands-helping"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Ayuda Express</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!--DASHBOARD -->
+    <li class="nav-item">
+        <a class="nav-link" href="/">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Panel Principal</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- ENCABEZADO: SOPORTE -->
+    <div class="sidebar-heading">
+        Centro de Soporte
+    </div>
+
+    <!-- Incidencias -->
+    <li class="nav-item {% if request.resolver_match.url_name == 'lista_incidencias' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'lista_incidencias' %}">
+            <i class="fas fa-fw fa-headset"></i>
+            <span>Incidencias / Tickets</span>
+        </a>
+    </li>
+
+    <!-- Notificaciones -->
+    <li class="nav-item {% if request.resolver_match.url_name == 'lista_notificaciones' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'lista_notificaciones' %}">
+            <i class="fas fa-fw fa-bell"></i>
+            <span>Notificaciones</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- ENCABEZADO: OPERACIONES -->
+    <div class="sidebar-heading">
+        Operaciones
+    </div>
+
+    <!-- Agendas -->
+    <li class="nav-item {% if request.resolver_match.url_name == 'lista_agendas' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'lista_agendas' %}">
+            <i class="fas fa-fw fa-calendar"></i>
+            <span>Agenda de Citas</span>
+        </a>
+    </li>
+
+    <!-- Contratos -->
+    <li class="nav-item {% if request.resolver_match.url_name == 'lista_contratos' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'lista_contratos' %}">
+            <i class="fas fa-fw fa-file-contract"></i>
+            <span>Contratos</span>
+        </a>
+    </li>
+
+    <!-- Servicios y Categorías (Colapsable) -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseServices" aria-expanded="true" aria-controls="collapseServices">
+            <i class="fas fa-fw fa-concierge-bell"></i>
+            <span>Catálogo Servicios</span>
+        </a>
+        <div id="collapseServices" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Gestión de Servicios:</h6>
+                <a class="collapse-item" href="{% url 'lista_servicios' %}">Servicios</a>
+                <a class="collapse-item" href="{% url 'lista_categoria_servicio' %}">Categorías</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- ENCABEZADO: ADMINISTRACIÓN -->
+    <div class="sidebar-heading">
+        Gestión Interna
+    </div>
+
+    <!-- Menú Colapsable: Usuarios y Accesos -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Usuarios y Roles</span>
+        </a>
+        <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Directorios:</h6>
+                <a class="collapse-item" href="{% url 'lista_usuarios' %}">Lista de Usuarios</a>
+                <a class="collapse-item" href="{% url 'lista_ciudades' %}">Ciudades</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Menú Colapsable: Finanzas -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinance" aria-expanded="true" aria-controls="collapseFinance">
+            <i class="fas fa-fw fa-dollar-sign"></i>
+            <span>Finanzas</span>
+        </a>
+        <div id="collapseFinance" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Caja y Facturación:</h6>
+                <a class="collapse-item" href="{% url 'lista_pagos' %}">Pagos Recibidos</a>
+                <a class="collapse-item" href="{% url 'lista_metodos' %}">Métodos de Pago</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Menú Colapsable: Retroalimentación -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFeedback" aria-expanded="true" aria-controls="collapseFeedback">
+            <i class="fas fa-fw fa-star"></i>
+            <span>Opiniones</span>
+        </a>
+        <div id="collapseFeedback" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Calidad:</h6>
+                <a class="collapse-item" href="{% url 'lista_calificaciones' %}">Calificaciones</a>
+                <a class="collapse-item" href="{% url 'lista_comentarios' %}">Comentarios</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- BOTÓN REDONDO PARA COLAPSAR -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>

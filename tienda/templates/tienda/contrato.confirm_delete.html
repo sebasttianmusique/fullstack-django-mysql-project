@@ -1,0 +1,27 @@
+{% extends "tienda/base.html" %}
+{% block title %}Eliminar Contrato{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger">Confirmar eliminación</h2>
+
+<p>¿Está seguro de que desea eliminar el contrato 
+<strong>ID {{ contrato.id_contrato }}</strong>?</p>
+
+<div class="mb-3">
+    <small class="text-muted">
+        Cliente: {{ contrato.id_cliente }}<br>
+        Profesional: {{ contrato.id_profesional }}<br>
+        Servicio: {{ contrato.id_servicio }}<br>
+        Fecha inicio: {{ contrato.fecha_inicio }}<br>
+        Estado: {{ contrato.estado_contrato }}
+    </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'lista_contratos' %}" class="btn btn-secondary">No, cancelar</a>
+</form>
+
+{% endblock %} 

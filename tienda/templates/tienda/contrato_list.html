@@ -1,0 +1,152 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Gestión de Contratos{% endblock %}
+
+{% block content %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    
+    <h1 class="h3 mb-0 text-primary font-weight-bold d-flex align-items-center">
+      
+        <img src="{% static 'img/contratos.png' %}" alt="Icono Contratos" 
+             style="height: 80px; width: auto; margin-right: 15px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));">
+        
+        <span style="letter-spacing: -0.5px;">Gestión de Contratos</span>
+    </h1>
+
+    <a href="{% url 'crear_contrato' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm rounded-pill px-3">
+        <i class="fas fa-file-signature fa-sm text-white-50 mr-1"></i> Crear Contrato
+    </a>
+</div>
+
+
+<div class="row">
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Contratos</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ contratos|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-file-contract fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Contratos Activos</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-signature fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 border-bottom-primary">
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-table mr-2"></i>Listado de Acuerdos</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 5%;">N°</th>
+                        <th style="width: 20%;">Cliente</th>
+                        <th style="width: 20%;">Profesional</th>
+                        <th style="width: 20%;">Servicio</th>
+                        <th style="width: 10%;">Estado</th>
+                        <th style="width: 15%;">Fecha Inicio</th>
+                        <th style="width: 10%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contrato in contratos %}
+                    <tr>
+                        <td class="align-middle font-weight-bold text-gray-600">
+                            {{ contrato.id_contrato }}
+                        </td>
+                        
+                        
+                        <td class="align-middle">
+                            <div class="font-weight-bold text-primary">
+                                <i class="fas fa-user-circle mr-1"></i>
+                                {{ contrato.id_cliente.id_cliente.nombre }} {{ contrato.id_cliente.id_cliente.apellido }}
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            <div class="text-dark">
+                                <i class="fas fa-user-tie text-gray-400 mr-1"></i>
+                                {{ contrato.id_profesional.id_profesional.nombre }} {{ contrato.id_profesional.id_profesional.apellido }}
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            <span class="text-gray-700">{{ contrato.id_servicio.nombre_servicio }}</span>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            {% if contrato.estado_contrato|lower == 'activo' %}
+                                <span class="badge badge-success px-2 py-1">Activo</span>
+                            {% elif contrato.estado_contrato|lower == 'finalizado' %}
+                                <span class="badge badge-secondary px-2 py-1">Finalizado</span>
+                            {% elif contrato.estado_contrato|lower == 'cancelado' %}
+                                <span class="badge badge-danger px-2 py-1">Cancelado</span>
+                            {% else %}
+                                <span class="badge badge-info px-2 py-1">{{ contrato.estado_contrato }}</span>
+                            {% endif %}
+                        </td>
+
+                        
+                        <td class="align-middle text-xs">
+                            {{ contrato.fecha_inicio|date:"d M, Y" }}
+                        </td>
+
+                        
+                        <td class="align-middle text-center">
+                            <a href="{% url 'editar_contrato' contrato.id_contrato %}" class="btn btn-warning btn-sm btn-circle shadow-sm mr-1" title="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'eliminar_contrato' contrato.id_contrato %}" class="btn btn-danger btn-sm btn-circle shadow-sm" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <img src="{% static 'img/undraw_posting_photo.svg' %}" alt="Empty" style="width: 150px; opacity: 0.5;" class="mb-3">
+                            <p class="text-gray-500 mb-0">No hay contratos registrados.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "tienda/base.html" %}
+{% block title %}Eliminar Servicio{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger">Confirmar eliminación</h2>
+
+<p>
+    ¿Está seguro de que desea eliminar el servicio 
+    <strong>{{ servicio.nombre_servicio }}</strong>?
+</p>
+
+<div class="mb-3">
+    <small class="text-muted">
+        Descripción: {{ servicio.descripcion }}<br>
+        Precio: ${{ servicio.precio_base }}<br>
+        Duración: {{ servicio.duracion_estimada }} min<br>
+        Garantía: {{ servicio.garantia_meses }} meses<br>
+        Categoría: {{ servicio.id_categoria }}
+    </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'lista_servicios' %}" class="btn btn-secondary">No, cancelar</a>
+</form>
+
+{% endblock %} 

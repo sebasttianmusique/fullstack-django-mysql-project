@@ -1,0 +1,30 @@
+{% extends "tienda/base.html" %}
+{% block title %}Eliminar Pago{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger">Confirmar eliminación</h2>
+
+<p>
+    ¿Está seguro de que desea eliminar el pago 
+    <strong>ID {{ pago.id_pago }}</strong>?
+</p>
+
+<div class="mb-3">
+    <small class="text-muted">
+        Contrato: {{ pago.id_contrato }}<br>
+        Método: {{ pago.id_metodo_pago }}<br>
+        Agenda: {{ pago.id_agenda }}<br>
+        Monto: ${{ pago.monto }}<br>
+        Fecha: {{ pago.fecha_pago }}<br>
+        Estado: {{ pago.estado_pago }}
+    </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'lista_pagos' %}" class="btn btn-secondary">No, cancelar</a>
+</form>
+
+{% endblock %} 

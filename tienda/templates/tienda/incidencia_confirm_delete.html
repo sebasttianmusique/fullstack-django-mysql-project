@@ -1,0 +1,33 @@
+ {% extends "tienda/base.html" %}
+{% block title %}Eliminar incidencia{% endblock %}
+
+{% block content %}
+
+<h2 class="text-danger">Confirmar eliminación</h2>
+
+<p>
+    ¿Está seguro de que desea eliminar la incidencia 
+    <strong>ID {{ incidencia.id_incidencia }}</strong>?
+</p>
+
+<div class="mb-3">
+    <small class="text-muted">
+        Cliente: {{ incidencia.id_cliente }}<br>
+        Profesional: {{ incidencia.id_profesional }}<br>
+        Servicio: {{ incidencia.id_servicio }}<br>
+        Administrador: {{ incidencia.id_administrador }}<br>
+        Tipo incidencia: {{ incidencia.tipo_incidencia }}<br>
+        Descripción: {{ incidencia.descripcion }}<br>
+        Estado: {{ incidencia.estado_incidencia }}<br>
+        Fecha creación: {{ incidencia.fecha_creacion }}<br>
+        Fecha resolución: {{ incidencia.fecha_resolucion|default:"Sin resolver" }}
+    </small>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'lista_incidencias' %}" class="btn btn-secondary">No, cancelar</a>
+</form>
+
+{% endblock %} 

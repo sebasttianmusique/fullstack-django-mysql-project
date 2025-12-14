@@ -1,0 +1,151 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Catálogo de Servicios{% endblock %}
+
+{% block content %}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    
+    <h1 class="h3 mb-0 text-primary font-weight-bold d-flex align-items-center">
+      
+        <img src="{% static 'img/servicio.png' %}" alt="Icono Servicios" 
+             style="height: 80px; width: auto; margin-right: 15px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));">
+        
+        <span style="letter-spacing: -0.5px;">Catálogo de Servicios</span>
+    </h1>
+
+    <a href="{% url 'crear_servicio' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm rounded-pill px-3">
+        <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Nuevo Servicio
+    </a>
+</div>
+
+
+<div class="row">
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Servicios</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ servicios|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-concierge-bell fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Oferta Disponible</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-tags fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 border-bottom-primary">
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-clipboard-list mr-2"></i>Lista de Servicios Ofrecidos</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Nombre del Servicio</th>
+                        <th style="width: 15%;">Categoría</th>
+                        <th style="width: 15%;">Precio Base</th>
+                        <th style="width: 25%;">Detalles Técnicos</th>
+                        <th style="width: 15%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for servicio in servicios %}
+                    <tr>
+                        <td class="align-middle font-weight-bold text-gray-600">
+                            #{{ servicio.id_servicio }}
+                        </td>
+                        
+                        
+                        <td class="align-middle">
+                            <div class="font-weight-bold text-primary mb-1">
+                                {{ servicio.nombre_servicio }}
+                            </div>
+                            <div class="small text-muted font-italic">
+                                "{{ servicio.descripcion|truncatechars:50 }}"
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            {% if servicio.id_categoria %}
+                                <span class="badge badge-info px-2 py-1">
+                                    <i class="fas fa-tag mr-1"></i> {{ servicio.id_categoria.nombre_categoria }}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-secondary">Sin Categoría</span>
+                            {% endif %}
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            <div class="font-weight-bold text-success h5 mb-0">
+                                ${{ servicio.precio_base }}
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle small">
+                            <div class="mb-1">
+                                <i class="fas fa-clock text-warning mr-1"></i> 
+                                <strong>Duración:</strong> {{ servicio.duracion_estimada }} min
+                            </div>
+                            <div>
+                                <i class="fas fa-shield-alt text-secondary mr-1"></i> 
+                                <strong>Garantía:</strong> {{ servicio.garantia_meses }} meses
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle text-center">
+                            <a href="{% url 'editar_servicio' servicio.id_servicio %}" class="btn btn-warning btn-sm btn-circle shadow-sm mr-1" title="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'eliminar_servicio' servicio.id_servicio %}" class="btn btn-danger btn-sm btn-circle shadow-sm" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <img src="{% static 'img/undraw_posting_photo.svg' %}" alt="Empty" style="width: 150px; opacity: 0.5;" class="mb-3">
+                            <p class="text-gray-500 mb-0">No hay servicios registrados en el catálogo.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

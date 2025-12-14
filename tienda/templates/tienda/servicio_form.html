@@ -1,0 +1,22 @@
+ {% extends "tienda/base.html" %}
+{% block title %}Formulario de Servicios{% endblock %}
+
+{% block content %}
+
+<h2>
+  {% if form.instance.pk %}
+    Editar servicio
+  {% else %}
+    Crear servicio
+  {% endif %}
+</h2>
+
+<form method="post" class="mt-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{% url 'lista_servicios' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %} 

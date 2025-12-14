@@ -1,0 +1,170 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Notificaciones{% endblock %}
+
+{% block content %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    
+    <h1 class="h3 mb-0 text-primary font-weight-bold d-flex align-items-center">
+        
+        <img src="{% static 'img/notificacion.png' %}" alt="Icono Notificaciones" 
+             style="height: 80px; width: auto; margin-right: 15px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));">
+        
+        <span style="letter-spacing: -0.5px;">Gestión de Notificaciones</span>
+    </h1>
+
+    <a href="{% url 'crear_notificacion' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm rounded-pill px-3">
+        <i class="fas fa-paper-plane fa-sm text-white-50 mr-1"></i> Enviar Notificación
+    </a>
+</div>
+
+
+<div class="row">
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Enviadas</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ notificaciones|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-mail-bulk fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pendientes de Lectura</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-envelope fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 border-bottom-primary">
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-bell mr-2"></i>Historial de Mensajes</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Destinatario</th>
+                        <th style="width: 30%;">Mensaje & Contexto</th>
+                        <th style="width: 15%;">Tipo</th>
+                        <th style="width: 10%;">Estado</th>
+                        <th style="width: 15%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notificacion in notificaciones %}
+                    <tr>
+                        <td class="align-middle font-weight-bold text-gray-600">
+                            {{ notificacion.id_notificacion }}
+                        </td>
+                        
+                        
+                        <td class="align-middle">
+                            {% if notificacion.id_cliente %}
+                                <div class="font-weight-bold text-primary">
+                                    <i class="fas fa-user mr-1"></i> {{ notificacion.id_cliente.id_cliente.nombre }} {{ notificacion.id_cliente.id_cliente.apellido }}
+                                </div>
+                                <div class="small text-muted">Cliente</div>
+                            {% elif notificacion.id_profesional %}
+                                <div class="font-weight-bold text-info">
+                                    <i class="fas fa-user-tie mr-1"></i> {{ notificacion.id_profesional.id_profesional.nombre }} {{ notificacion.id_profesional.id_profesional.apellido }}
+                                </div>
+                                <div class="small text-muted">Profesional</div>
+                            {% elif notificacion.id_administrador %}
+                                <div class="font-weight-bold text-dark">
+                                    <i class="fas fa-user-shield mr-1"></i> {{ notificacion.id_administrador.id_administrador.nombre }}
+                                </div>
+                                <div class="small text-muted">Administrador</div>
+                            {% else %}
+                                <span class="text-muted">Desconocido</span>
+                            {% endif %}
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            <div class="text-dark mb-1" style="font-size: 0.95rem;">
+                                {{ notificacion.mensaje|truncatechars:60 }}
+                            </div>
+                            
+                            <div class="small">
+                                {% if notificacion.id_incidencia %}
+                                    <span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Caso #{{ notificacion.id_incidencia.id_incidencia }}</span>
+                                {% endif %}
+                                {% if notificacion.id_pago %}
+                                    <span class="badge badge-success"><i class="fas fa-dollar-sign"></i> Pago</span>
+                                {% endif %}
+                                {% if notificacion.id_agenda %}
+                                    <span class="badge badge-primary"><i class="fas fa-calendar"></i> Cita</span>
+                                {% endif %}
+                                <span class="text-muted ml-1">{{ notificacion.fecha_envio|date:"d M, H:i" }}</span>
+                            </div>
+                        </td>
+
+                        
+                        <td class="align-middle">
+                            <span class="badge badge-light border px-2">
+                                {{ notificacion.tipo_notificacion }}
+                            </span>
+                        </td>
+
+                        
+                        <td class="align-middle text-center">
+                            {% if 'no' in notificacion.estado_lectura|lower %}
+                                <i class="fas fa-envelope text-warning fa-lg" title="No Leída"></i>
+                            {% else %}
+                                <i class="fas fa-envelope-open-text text-gray-400 fa-lg" title="Leída"></i>
+                            {% endif %}
+                        </td>
+
+                        
+                        <td class="align-middle text-center">
+                            <a href="{% url 'editar_notificacion' notificacion.id_notificacion %}" class="btn btn-warning btn-sm btn-circle shadow-sm mr-1" title="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'eliminar_notificacion' notificacion.id_notificacion %}" class="btn btn-danger btn-sm btn-circle shadow-sm" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <img src="{% static 'img/undraw_posting_photo.svg' %}" alt="Empty" style="width: 150px; opacity: 0.5;" class="mb-3">
+                            <p class="text-gray-500 mb-0">No hay notificaciones registradas.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

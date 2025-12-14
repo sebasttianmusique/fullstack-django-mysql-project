@@ -1,0 +1,161 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Gestión de Usuarios{% endblock %}
+
+{% block content %}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    
+    <h1 class="h3 mb-0 text-primary font-weight-bold d-flex align-items-center">
+
+        <img src="{% static 'img/Usuario.png' %}" alt="Icono Usuarios" 
+             style="height: 80px; width: auto; margin-right: 15px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));">
+        
+        <span style="letter-spacing: -0.5px;">Gestión de Usuarios</span>
+    </h1>
+
+    <a href="{% url 'crear_usuario' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm rounded-pill px-3">
+        <i class="fas fa-user-plus fa-sm text-white-50 mr-1"></i> Registrar Usuario
+    </a>
+</div>
+
+<!-- Tarjetas de Métricas (KPIs) -->
+<div class="row">
+
+    <!-- Total Usuarios -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Registrados</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ usuarios|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usuarios Activos (Visual) -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Usuarios Activos</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Tabla de Datos -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3 border-bottom-primary">
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-address-book mr-2"></i>Directorio de Usuarios</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Nombre Completo</th>
+                        <th style="width: 25%;">Contacto</th>
+                        <th style="width: 15%;">Rol</th>
+                        <th style="width: 10%;">Estado</th>
+                        <th style="width: 10%;">Ubicación</th>
+                        <th style="width: 10%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td class="align-middle font-weight-bold text-gray-600">
+                            #{{ usuario.id_usuario }}
+                        </td>
+                        
+                        <!-- Columna Nombre -->
+                        <td class="align-middle">
+                            <div class="font-weight-bold text-dark d-flex align-items-center">
+                                <div class="btn-circle btn-sm btn-light mr-2">
+                                    <i class="fas fa-user text-gray-500"></i>
+                                </div>
+                                {{ usuario.nombre }} {{ usuario.apellido }}
+                            </div>
+                        </td>
+
+                        <!-- Columna Contacto -->
+                        <td class="align-middle small">
+                            <div><i class="fas fa-envelope text-primary mr-1"></i> {{ usuario.correo_electronico }}</div>
+                            <div class="mt-1"><i class="fas fa-phone text-success mr-1"></i> {{ usuario.telefono|default:"N/A" }}</div>
+                        </td>
+
+                        <!-- Columna Rol (Badges de colores) -->
+                        <td class="align-middle">
+                            {% if 'admin' in usuario.tipo_usuario|lower %}
+                                <span class="badge badge-dark px-2 py-1"><i class="fas fa-user-shield"></i> Admin</span>
+                            {% elif 'profesional' in usuario.tipo_usuario|lower %}
+                                <span class="badge badge-info px-2 py-1"><i class="fas fa-user-tie"></i> Profesional</span>
+                            {% elif 'cliente' in usuario.tipo_usuario|lower %}
+                                <span class="badge badge-primary px-2 py-1"><i class="fas fa-user"></i> Cliente</span>
+                            {% else %}
+                                <span class="badge badge-secondary">{{ usuario.tipo_usuario }}</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Columna Estado -->
+                        <td class="align-middle text-center">
+                            {% if usuario.estado|lower == 'activo' %}
+                                <span class="badge badge-success px-2 py-1">Activo</span>
+                            {% elif usuario.estado|lower == 'inactivo' %}
+                                <span class="badge badge-danger px-2 py-1">Inactivo</span>
+                            {% else %}
+                                <span class="badge badge-warning px-2 py-1">{{ usuario.estado }}</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Columna Ubicación -->
+                        <td class="align-middle small">
+                            {% if usuario.id_ciudad %}
+                                {{ usuario.id_ciudad.nombre_ciudad }}
+                            {% else %}
+                                <em class="text-muted">--</em>
+                            {% endif %}
+                        </td>
+
+                        <!-- Acciones -->
+                        <td class="align-middle text-center">
+                            <a href="{% url 'editar_usuario' usuario.id_usuario %}" class="btn btn-warning btn-sm btn-circle shadow-sm mr-1" title="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'eliminar_usuario' usuario.id_usuario %}" class="btn btn-danger btn-sm btn-circle shadow-sm" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <img src="{% static 'img/undraw_posting_photo.svg' %}" alt="Empty" style="width: 150px; opacity: 0.5;" class="mb-3">
+                            <p class="text-gray-500 mb-0">No hay usuarios registrados en el sistema.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
